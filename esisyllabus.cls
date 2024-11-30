@@ -1,3 +1,4 @@
+% Designed by: Abdelkrime Aries
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{esisyllabus}[2024/11/29 v1.0 ESI Syllabus Class]
 
@@ -5,14 +6,12 @@
 % Options
 %===============================================================
 
-\def\@tmode{Face-to-face}
+
 \newif\ifshort % short vrsion
 \shortfalse % by default it is long
 \newif\ifinfo % information
 \infofalse % by default no information
 
-\DeclareOption{hy}{\def\@tmode{Hybrid}} 
-\DeclareOption{ol}{\def\@tmode{Online}}
 \DeclareOption{short}{\shorttrue}
 \DeclareOption{info}{\infotrue}
 
@@ -41,73 +40,29 @@
 \usepackage[table]{xcolor}
 \usepackage{etoolbox} %list variables, if else
 \usepackage{tabularray}
+\usepackage{fancyhdr}
 
 
 \definecolor{skyblue}{RGB}{150, 200, 255}
 \definecolor{darkblue}{RGB}{20,40,120} %25,47,98}
 
 
-\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,includefoot,includehead,headheight=14pt,asymmetric]{geometry}
-
 %===============================================================
-% Options
-%===============================================================
-%\newif\ifenglish % a boolean variable to check if english is used
-%\englishfalse % y default it is not english
-
-
-%\DeclareOption*{ol}{\def\@tmode{OL}}
-%\ProcessOptions\relax
-
-
-
-%===============================================================
-% Control commands
-%===============================================================
-\newcommand{\makename}[2]{\titlecap{#1}\ \titlecap{#2}} %\MakeUppercase
-
-
-%\makeatletter
-\newcommand{\addnums}[3]{\expandafter\strip@pt\dimexpr#3pt+#2pt+#1pt\relax}
-%\makeatother
-	
-%===============================================================
-% Thesis labels
-%===============================================================
-\newcommand{\bgparbox}[1]{\colorbox{darkblue}{\setlength{\fboxsep}{6pt}%
-		
-		\begin{tabularx}{\dimexpr\linewidth-\fboxsep}{l>{\raggedright\arraybackslash}X}#1\end{tabularx}}}
-		
-\titleformat{\section}[block]
-{}{}{0em}
-{\bgparbox{\color{white}\bfseries\Large\thesection.\hskip8pt #1}}
-
-%\AtBeginDocument{%
-%	\immediate\openout\chapters@file=\jobname_chapters.tmp
-%}
-%
-%\AtEndDocument{%
-%	\immediate\closeout\chapters@file
-%}
-
-% The cover page will be in french whatever the used language
-%\ifenglish
-%
-%\fi
-
-%===============================================================
-% Thesis information
+% Internal Varivables
 %===============================================================
 
-%\newif\ifelab % a boolean variable to check if there is a lab info
-%\elabfalse
+\def\@csdvalidation{}
+\def\@csvalidation{}
+\def\@version{}
+\def\@syear{}
 
-% commands to store cover pages informations
 \def\@title{}
 \def\@semester{x}
 \def\@ects{n}
 \def\@coeff{m}
 \def\@unit{}
+\def\@tmode{Face-to-face}
+
 \def\@lect@volume{0}
 \def\@tuto@volume{0}
 \def\@prac@volume{0}
@@ -131,48 +86,21 @@
 \def\@practicallist{}
 
 
-%\def\@date{}
-
-
-%\def\@esilogo{logo/ESI_logo.png}
-
-% commands to set up cover pages informations
-\def\title#1{\def\@title{#1}}
-\def\semester#1{\def\@semester{#1}}
-\def\ects#1{\def\@ects{#1}}
-\def\coeff#1{\def\@coeff{#1}}
-\def\unit#1{\def\@unit{#1}}
-
-\newcommand{\volume}[3]{
-	\def\@lect@volume{#1}
-	\def\@tuto@volume{#2}
-	\def\@prac@volume{#3}
-	\def\@totl@volume{\addnums{#1}{#2}{#3}}
-}
-
-\newcommand{\ca}[2][]{\def\@ca@prc{#2\%}\def\@ca@cmt{#1}}
-\newcommand{\pr}[2][]{\def\@pr@prc{#2\%}\def\@pr@cmt{#1}}
-\newcommand{\fe}[2][]{\def\@fe@prc{#2\%}\def\@fe@cmt{#1}}
-\newcommand{\me}[2][]{\def\@me@prc{#2\%}\def\@me@cmt{#1}}
-
-
-%\def\date#1{\def\@date{#1}}
-
-
 \newcounter{cchapter}
 \newcounter{cpractical}
 
+%===============================================================
+% Helper commands (formatting)
+%===============================================================
 
-%\newcommand{\makechapter}[4]{
-%	\expandafter\arabic{cchapter} & #2 & 
-%	\begin{minipage}{9.15cm}
-%		\vspace{6pt}#4\vspace{6pt}
-%	\end{minipage} 
-%	& #3 \\*
-%}
+% Format an expert (First-name Family-name (email))
+\newcommand{\formatexpert}[3]{\titlecap{#1}\ \titlecap{#2} (\url{#3})} %\MakeUppercase
 
-\newcommand{\makechapter}[4]{
-%	\vspace{6pt}
+% summs the values of 3 float numbers
+\newcommand{\floatssum}[3]{\expandafter\strip@pt\dimexpr#3pt+#2pt+#1pt\relax}
+
+\newcommand{\formatchapter}[4]{
+	%	\vspace{6pt}
 	\begin{tabular}{|p{0.5cm}|p{5.5cm}|p{9.25cm}|p{1cm}|}
 		\hline
 		\rowcolor{skyblue}\textbf{N} & \textbf{Chapter title} & \textbf{Outline} & \textbf{\%} \\
@@ -187,7 +115,7 @@
 	\vskip6pt
 }
 
-\newcommand{\makepractical}[3]{
+\newcommand{\formatpractical}[3]{
 	\begin{tabular}{|p{0.5cm}|p{5.5cm}|p{10.73cm}|}
 		\hline
 		\rowcolor{skyblue}\textbf{N} & \textbf{Title} & \textbf{Description} \\
@@ -202,23 +130,56 @@
 	\vskip6pt
 }
 
-%\xdef\makechapter#1#2#3#4{#1 & #2 & #4 & #3 \\}
 
+%===============================================================
+% Setters (setting internal variables)
+%===============================================================
+
+\def\title#1{\def\@title{#1}}
+\def\semester#1{\def\@semester{#1}}
+\def\ects#1{\def\@ects{#1}}
+\def\coeff#1{\def\@coeff{#1}}
+\def\unit#1{\def\@unit{#1}}
+
+\def\csdvalidation#1{\def\@csdvalidation{#1}}
+\def\csvalidation#1{\def\@csvalidation{#1}}
+\def\version#1{\def\@version{#1}}
+\def\syear#1{\def\@syear{#1}}
+
+
+\newcommand{\ca}[2][]{\def\@ca@prc{#2\%}\def\@ca@cmt{#1}}
+\newcommand{\pr}[2][]{\def\@pr@prc{#2\%}\def\@pr@cmt{#1}}
+\newcommand{\fe}[2][]{\def\@fe@prc{#2\%}\def\@fe@cmt{#1}}
+\newcommand{\me}[2][]{\def\@me@prc{#2\%}\def\@me@cmt{#1}}
+
+\newcommand{\volume}[3]{
+	\def\@lect@volume{#1}
+	\def\@tuto@volume{#2}
+	\def\@prac@volume{#3}
+	\def\@totl@volume{\floatssum{#1}{#2}{#3}}
+}
+
+\def\hy{\def\@tmode{Hybrid}} 
+\def\ol{\def\@tmode{Online}}
+
+%===============================================================
+% Adding elements
+%===============================================================
 
 \newcommand\addchapter[3]{% titl prcntag outlin
-	\listadd{\@chapterslist}{\makechapter{\arabic{cchapter}}{#1}{#2}{#3}}
+	\listadd{\@chapterslist}{\formatchapter{\arabic{cchapter}}{#1}{#2}{#3}}
 }
 
 \newcommand\addpractical[2]{% titl outlin
-	\listadd{\@practicallist}{\makepractical{\arabic{cpractical}}{#1}{#2}}
+	\listadd{\@practicallist}{\formatpractical{\arabic{cpractical}}{#1}{#2}}
 }
 
 \newcommand\addredactor[3]{% firstname familyname mail
-	\listadd{\@redactorlist}{\makename{#1}{#2} (\url{#3})}
+	\listadd{\@redactorlist}{\formatexpert{#1}{#2}{#3}}
 }
 
 \newcommand\addreviewer[3]{% firstname familyname mail
-	\listadd{\@reviewerlist}{\makename{#1}{#2} (\url{#3})}
+	\listadd{\@reviewerlist}{\formatexpert{#1}{#2}{#3}}
 }
 
 \newcommand\addprerequisite[1]{%
@@ -233,34 +194,83 @@
 	\listadd{\@methodlist}{#1}
 }
 
-%\def\lablogo#1{\def\@lablogo{#1}\elabtrue}
-%\def\labtitle#1{\def\@labtitle{#1}\elabtrue}
-
-
 %===============================================================
-% General Layout
+% Headers and Footers
 %===============================================================
 
-% Default page style
+\fancypagestyle{fancyinfo}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyfoot[C]{
+		\scriptsize
+		\begin{tblr}{
+				colspec = {p{7.8cm}lp{7.8cm}lp{1.1cm}},
+				rows = {valign=m, halign=c},
+				cell{1}{odd}={darkblue, fg=white, font=\bfseries},
+				colsep=3pt,
+				rowsep=3pt,
+				stretch = 0,
+				vlines = {1pt,solid},
+				hlines = {1pt,solid},
+				hline{1-3} = {even}{text=\clap{}},
+			}
+			
+			Validation CSD-ISI / CSD-CP && Validation du CS && Page\\
+			\@csdvalidation && \@csvalidation && \thepage\\
+		\end{tblr}
+	}
 
-\renewcommand{\baselinestretch}{1.15} 
+	\fancyhead[C]{
+		\scriptsize
+		\begin{tblr}{
+				colspec = {p{3cm}lp{9.5cm}lp{1.9cm}lp{1.9cm}},
+				rows = {valign=m, halign=c},
+				cell{1}{5,7}={darkblue, fg=white, font=\bfseries},
+				colsep=3pt,
+				rowsep=3pt,
+				stretch = 0,
+				vlines = {1pt,solid},
+				hlines = {1pt,solid},
+				hline{1-3} = {even}{text=\clap{}},
+				hline{2} = {2}{text=\clap{}},
+			}
+			
+			\SetCell[r=2]{c}\includegraphics[height=1cm]{logo/ESI_logo_txt.png} &&
+			SYLLABUS MATIERE\_version LONGUE
+			&& Version && Ann\'ee \\
+			&& (Destinataire :  Usage Interne restreint  via Talents) && \@version && \@syear\\
+		\end{tblr}
+	}
+}
 
-%\newcommand{\identification}{%
-%	\begin{tabular}{|p{2.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{2.99cm}|}
-%		\hline
-%		Semester & \multicolumn{7}{|c|}{Course Title} \\
-%		\hline
-%		\@semester & \multicolumn{7}{|c|}{\@title} \\
-%		\hline
-%		UE Code && ECTS && Coeff && \multicolumn{4}{|c|}{Hourly volume} && Teaching Mode \\
-%		\hline
-%		\multirow{2}{*}{UEF xxx} & \multirow{2}{*}{\@ects} & \multirow{2}{*}{\@coeff} & 
-%		Lectures & Tutorials & Practicals & Total & \multirow{2}{*}{\@tmode} \\
-%		\cline{4-7}
-%		&  &  & \@lect@volume H & \@tuto@volume H & \@prac@volume H & \@totl@volume H &  \\
-%		\hline
-%	\end{tabular}
-%}
+\fancypagestyle{fancymain}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{1pt}
+	\fancyfoot[C]{-\thepage-}
+	
+	\fancyhead[L]{ESI- \@title\ (version LONGUE)}
+}
+
+\fancypagestyle{fancyfirstpage}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyfoot[C]{-\thepage-}
+	
+%	\fancyhead[C]{SYLLABUS MATIERE\_version LONGUE}
+}
+
+\ifinfo
+\usepackage[left=1.5cm,right=1.5cm,top=1cm,bottom=1cm,includefoot,includehead,headheight=1.25cm,asymmetric]{geometry}
+\pagestyle{fancyinfo}
+\else
+\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,includefoot,includehead,headheight=14pt,asymmetric]{geometry}
+\pagestyle{fancymain}
+\thispagestyle{fancyfirstpage}
+\fi
+
+%===============================================================
+% Printing commands (print results)
+%===============================================================
 
 \newcommand{\identification}{%
 	\begin{tblr}{
@@ -340,7 +350,6 @@
 	}	
 }
 
-
 \newcommand{\methods}{%
 	\ifdefempty{\@methodlist}{}{
 		\renewcommand*{\do}[1]{\item ##1}
@@ -348,6 +357,22 @@
 			\dolistloop{\@methodlist}
 		\end{itemize}
 	}	
+}
+
+\newcommand{\chapters}{
+	\ifdefempty{\@chapterslist}{}{
+		\setcounter{cchapter}{0}
+		\renewcommand*{\do}[1]{\stepcounter{cchapter}##1}
+		\dolistloop{\@chapterslist}
+	}
+}
+
+\newcommand{\practicals}{
+	\ifdefempty{\@practicallist}{}{
+		\setcounter{cpractical}{0}
+		\renewcommand*{\do}[1]{\stepcounter{cpractical}##1}
+		\dolistloop{\@practicallist}
+	}
 }
 
 \newcommand{\assessment}{%
@@ -386,38 +411,35 @@
 }
 
 
+%===============================================================
+% Formatting commands
+%===============================================================
+
+\AtBeginDocument{
+	\begin{center}
+		\huge\bfseries\color{darkblue} SYLLABUS
+	\end{center}
+}
+%
+%\AtEndDocument{
+%	
+%}
+
+\newcommand{\bgparbox}[1]{\colorbox{darkblue}{\setlength{\fboxsep}{6pt}%
+		
+		\begin{tabularx}{\dimexpr\linewidth-\fboxsep}{l>{\raggedright\arraybackslash}X}#1\end{tabularx}}}
+
+\titleformat{\section}[block]
+{}{}{0em}
+{\bgparbox{\color{white}\bfseries\Large\thesection.\hskip8pt #1}}
+
 \setlength\parindent{0pt}
 
 %\renewcommand{\thesection}{\arabic{section}.}
 \renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}.}
 
 
-%\newcommand{\chapters}{
-%	\renewcommand*{\do}[1]{##1\hline}
-%	\begin{tabular}{|p{0.5cm}|p{6cm}|p{9.25cm}|p{0.5cm}|}
-%		\hline
-%		N & Title & Outline & \% \\
-%		\hline
-%		\dolistloop{\@chapterslist}
-%	\end{tabular}
-%}
-
-\newcommand{\chapters}{
-	\ifdefempty{\@chapterslist}{}{
-		\setcounter{cchapter}{0}
-		\renewcommand*{\do}[1]{\stepcounter{cchapter}##1}
-		\dolistloop{\@chapterslist}
-	}
-}
-
-\newcommand{\practicals}{
-	\ifdefempty{\@practicallist}{}{
-		\setcounter{cpractical}{0}
-		\renewcommand*{\do}[1]{\stepcounter{cpractical}##1}
-		\dolistloop{\@practicallist}
-	}
-}
-
+\renewcommand{\baselinestretch}{1.15} 
 
 \usepackage{enumitem}
 \setlist{nolistsep}
