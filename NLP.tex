@@ -1,0 +1,215 @@
+%\documentclass[]{esisyllabus}
+\documentclass[hy]{esisyllabus}
+%\documentclass[ol]{esisyllabus}
+
+
+
+%=================================================================
+% INFO
+%=================================================================
+\title{Natural Language Processing}
+\semester{4}
+\ects{3}
+\coeff{3}
+\volume{22.5}{6}{16.5}
+\unit{UEF 4.3.1}
+
+%=================================================================
+% redactors & 
+%=================================================================
+
+\addredactor{Abdelkrime}{Aries}{ab\_aries@esi.dz}
+
+
+
+\addobjective{Understand some linguistic concepts and problems}
+\addobjective{Apply concepts covered in the prerequisites to solve NLP tasks}
+\addobjective{Discover some available NLP tools and resources}
+\addobjective{Understand research directions in NLP}
+\addobjective{Design and implement solutions to NLP problems}
+
+
+\addprerequisite{Data structures (1CP-ALSDD)}
+\addprerequisite{Probability and statistics (2CP-PRST1, 2CP-PRST2)}
+\addprerequisite{Algebra and calculus (2CP-ANAL3, 2CP-ALG3, 2CP-ANAL4)}
+\addprerequisite{Formal languages theory (1CS-THP)}
+\addprerequisite{Operations research (1CS-RO)}
+\addprerequisite{Machine learning (2CS-ML)}
+
+\addmethod{Lectures (presentation with open discussion)}
+\addmethod{Labs (graded practicals where students must implement a concept from scratch)}
+\addmethod{Workshops (ungraded where students implement an application using APIs)}
+\addmethod{Tutorials (Exercices)}
+\addmethod{Online quizzes (graded online quizzes at the end of each chapter)}
+
+
+
+\ca[Online quizzes]{10}
+\pr[Graded Labs]{20}
+\me{30}
+\fe{40}
+
+
+\addchapter{Introduction to NLP}{7}{
+	\begin{itemize}
+		\item History
+		\item Language processing levels
+		\item Applications of NLP
+		\item NLP Challenges
+	\end{itemize}
+}
+
+\addchapter{ML for NLP}{10}{
+	\begin{itemize}
+		\item Machine learning review
+		\item Text classification
+		\item Sequences classification
+	\end{itemize}
+}
+
+\addchapter{Basic text processing}{10}{
+	\begin{itemize}
+		\item Characters processing
+		\item Text Segmentation
+		\item Text normalization and filtering
+		\item Morphology processing
+	\end{itemize}
+}
+
+\addchapter{Sequence processing}{11}{
+	\begin{itemize}
+		\item Language models
+		\item Sequence labeling
+		\item Part of Speech (PoS) tagging
+	\end{itemize}
+}
+
+\addchapter{Parsing}{14}{
+	\begin{itemize}
+		\item Syntactic structures
+		\item Constituency parsing
+		\item Dependency parsing
+	\end{itemize}
+}
+
+\addchapter{Word semantics}{12}{
+	\begin{itemize}
+		\item Lexical databases
+		\item Vector representation of words
+		\item Word embedding
+		\item Word Sense Disambiguation (WSD)
+	\end{itemize}
+}
+
+\addchapter{Sentence semantics}{12}{
+	\begin{itemize}
+		\item Semantic roles
+		\item Semantic roles labeling (SRL)
+		\item Semantic representation of sentences
+	\end{itemize}
+}
+
+\addchapter{Discourse}{10}{
+	\begin{itemize}
+		\item Coreference detection
+		\item Discourse coherence
+		\item Textual entailment
+		\item Topic segmentation	
+	\end{itemize}
+}
+
+\addchapter{Some applications}{14}{
+	\begin{itemize}
+		\item Transformation (Machine translation, Automatic text summarization)
+		\item Interaction (Question-Answering, Dialogue systems)
+		\item Classification (Sentiment analysis, Readability)
+		\item Speech (Recognition, Synthesis)	
+	\end{itemize}
+}
+
+
+
+\addpractical{Labs}{
+	Implementing an application from scratch to learn some concepts like regular expressions, edit distance, Ngrams, HMM, etc. 
+	Each year there is a new lab: Contacts' mining, Naive SpellChecker, Tweets' similarity, Autocompletion, Natural language detector, Tweets' grammaticality judgment, PoS tagging using HMMs, CKY, Plagiarism detection, Sentences' similarity based on their words.
+}
+
+\addpractical{Tutorials}{
+	Discussing some exercices. It can be calculated such as Ngrams, HMMs, TF, word-word encoding. 
+	It can be an application of a given method such as CKY parsing, Shift-Reduce parsing, graph-based parsing, semantic parsing, coreference and coherence. 
+	It can be critical thinking; given a problem, discuss possible solutions or given a solution find its limits and how to fix it.
+}
+
+\addpractical{Workshops}{
+	Designing and implementing an application using available API's. 
+	The goal is to learn using tools to construct a functional application. 
+	For example, PoS tagging using NLTK$<$HMM$>$ and flair$<$IOB-embedding$>$; RNN-based Machine translation using Keras; etc.
+}
+
+\addpractical{Online quizzes}{
+	Answering a quiz at the end of each chapter. 
+	The goal is to promote lecture review by students.
+}
+
+%\usecovertheme{k3}
+
+\begin{document}
+	
+	\begin{center}
+		\huge\bfseries\color{darkblue} SYLLABUS
+	\end{center}
+	
+	\section{Identification}
+
+	\identification
+	
+	\section{Course Outline \& Objectives}
+
+	Natural Language Processing (NLP) is an interdisciplinary field that combines linguistics, computer science, and artificial intelligence to enable computers to understand and generate human language. 
+	With advanced models like OpenAI's GPT and Google's BERT, NLP has become crucial across various industries. 
+	It is often included in artificial intelligence (AI) and data science curricula as it is a key application of AI. 
+	This course covers both research and development aspects of NLP, addressing a wide range of topics such as lexicon, syntax, semantics, pragmatics, and discourse. 
+	While it shares similarities with compilation courses, NLP uniquely addresses the inherent ambiguity of natural language, unlike the well-defined structure of programming languages.
+	
+	\objectives
+	
+	\section{Prerequisites}
+	
+	\prerequisites
+	
+	\section{Content}
+	
+	\subsection{Lectures}
+	
+	\chapters
+	
+	\subsection{Tutorials/Practicals}
+	
+	\practicals
+	
+	\section{Learning methods/tools}
+	
+	\methods
+	
+	\section{Assessment}
+	
+	\assessment
+
+	\section{Bibliography}
+	
+	\bibliographystyle{kendnat}
+	\nocite{*}
+	\renewcommand{\bibsection}{}
+	\bibliography{NLP}
+	
+	
+	\section{Redactor(s)}
+	
+	\redactors
+	
+	\reviewers
+	
+
+
+
+\end{document}
