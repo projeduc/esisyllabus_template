@@ -1,0 +1,180 @@
+%\documentclass[]{esisyllabus}
+\documentclass[info]{esisyllabus}
+
+%=================================================================
+% ADMIN
+%=================================================================
+
+\setcsdvalidation{CSD-XX/12/2024}
+\setcsvalidation{CS-XX/12/2024}
+\setversion{1.3}
+\setyear{2024}
+
+%=================================================================
+% INFO and Assessment
+%=================================================================
+\input{2CSSID_S2_SPMS.inf}
+
+%=================================================================
+% Abstract
+%=================================================================
+
+\setabstract{
+	This course will provide students with the fundamental notions of stochastic processes and simulation. It
+	is divided into two main parts: Markov random processes (including: the Markov chain, the Poisson process
+	and the birth and death processes) and simulation.
+	Each of the parts will contain practically important application models such as: random walks, queuing
+	models, MCMC, simulated annealing.
+}
+
+%=================================================================
+% objectives
+%=================================================================
+
+\addobjective{Use the studied stochastic processes}
+\addobjective{Apply appropriate queue models and provide performance parameters}
+\addobjective{Use simulation techniques}
+
+%=================================================================
+% prerequisites
+%=================================================================
+
+\addprerequisite{Basic knowledge of probability statistics}
+
+%=================================================================
+% Chapters' outline
+%=================================================================
+
+\addchapter{Markov chains}{25}{
+	\begin{itemize}
+		\item Classification of states
+		\item Absorbing Markov chains
+		\item Reversible Markov Chains
+		\item Ergodic Theorems
+		\item Application: Random Walks
+		\begin{itemize}
+			\item Random Walk on Z and Zd
+			\item Asymptotic Behavior
+			\item Symmetric Random Walks
+			\item PageRank Algorithm
+		\end{itemize}
+	\end{itemize}
+}
+
+\addchapter{Poisson process}{15}{
+	\begin{itemize}
+		\item 
+	\end{itemize}
+}
+
+\addchapter{Birth and Death processes}{5}{
+	\begin{itemize}
+		\item 
+	\end{itemize}
+}
+
+\addchapter{Queuing Models}{25}{
+	\begin{itemize}
+		\item Markov Models: Open and Closed Systems
+		\item M/M/1 Model
+		\item M/M/s Model
+		\item M/M/S/L, M/M/S/S and M/M/$\infty$ Models
+	\end{itemize}
+}
+
+\addchapter{Simulation}{20}{
+	\begin{itemize}
+		\item Random Number Generators
+		\item Generation of Discrete and Continuous Random Variables According to Different
+		Distributions
+		\item Rejection Method
+		\item Estimation of an Integral by the Monte Carlo Method
+		\item Importance Sampling
+		\item Variance Reduction Techniques
+	\end{itemize}
+}
+
+\addchapter{MCMC}{10}{
+	\begin{itemize}
+		\item Gibbs Sampler
+		\item MH Sampler
+	\end{itemize}
+}
+
+
+%=================================================================
+% Practicals and Tutorials
+%=================================================================
+
+%\addpractical{Labs}{
+%	
+%}
+
+%=================================================================
+% learning methods/tools
+%=================================================================
+
+\addmethod{Exercise sessions (TD)}
+\addmethod{Practical work, using simulation techniques}
+
+%=================================================================
+% redactors & reviewers
+%=================================================================
+
+\addredactor{Naïma}{Bessah}{n\_bessah@esi.dz}
+
+%\addreviewer{Abdelkrime}{Aries}{ab\_aries@esi.dz}
+
+
+\begin{document}
+	
+	\section{Identification}
+
+	\printidentification
+	
+	\section{Course description \& objectives}
+
+	\printabstract
+	
+	\printobjectives
+	
+	\section{Prerequisites}
+	
+	\printprerequisites
+	
+	\section{Content}
+	
+	\subsection{Lectures}
+	
+	\printchapters
+	
+	\subsection{Tutorials/Practicals}
+	
+	\printpracticals
+	
+	\section{Learning methods/tools}
+	
+	\printmethods
+	
+	\section{Assessment}
+	
+	\printassessment
+
+	\section{Bibliography}
+	
+	\bibliographystyle{apacite}
+	\nocite{*}
+	\renewcommand{\bibsection}{}
+	\bibliography{2CSSID_S2_SPMS}
+	
+	
+	\section{Redactor(s)}
+	
+	\printredactors
+	
+	\printreviewers
+	
+
+
+
+\end{document}

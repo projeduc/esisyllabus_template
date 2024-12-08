@@ -30,7 +30,7 @@
 \usepackage[centertags]{amsmath}
 \usepackage{multirow}
 \usepackage{hyperref}
-\usepackage{natbib}
+%\usepackage{natbib}
 \usepackage[explicit]{titlesec}
 \usepackage{tcolorbox}
 \usepackage{times}
@@ -41,6 +41,7 @@
 \usepackage{etoolbox} %list variables, if else
 \usepackage{tabularray}
 \usepackage{fancyhdr}
+\usepackage[natbibapa]{apacite}
 
 
 \definecolor{skyblue}{RGB}{150, 200, 255}
@@ -60,8 +61,10 @@
 \def\@semester{x}
 \def\@ects{n}
 \def\@coeff{m}
-\def\@unit{}
+\def\@unitid{}
+\def\@unittype{F}
 \def\@tmode{Face-to-face}
+\def\@socle{CP}
 
 \def\@lect@volume{0}
 \def\@tuto@volume{0}
@@ -84,6 +87,7 @@
 \def\@chapterslist{}
 \def\@methodlist{}
 \def\@practicallist{}
+\def\@abstract{}
 
 
 \newcounter{cchapter}
@@ -135,32 +139,41 @@
 % Setters (setting internal variables)
 %===============================================================
 
-\def\title#1{\def\@title{#1}}
-\def\semester#1{\def\@semester{#1}}
-\def\ects#1{\def\@ects{#1}}
-\def\coeff#1{\def\@coeff{#1}}
-\def\unit#1{\def\@unit{#1}}
+\def\settitle#1{\def\@title{#1}}
+\def\setsemester#1{\def\@semester{#1}}
+\def\setects#1{\def\@ects{#1}}
+\def\setcoeff#1{\def\@coeff{#1}}
+\def\setunitid#1{\def\@unitid{#1}}
 
-\def\csdvalidation#1{\def\@csdvalidation{#1}}
-\def\csvalidation#1{\def\@csvalidation{#1}}
-\def\version#1{\def\@version{#1}}
-\def\syear#1{\def\@syear{#1}}
+\def\setmethodological{\def\@unittype{M}}
+\def\setiscovery{\def\@unittype{D}}
+\def\settransversal{\def\@unittype{T}}
+
+\def\setcs{\def\@socle{CS}}
 
 
-\newcommand{\ca}[2][]{\def\@ca@prc{#2\%}\def\@ca@cmt{#1}}
-\newcommand{\pr}[2][]{\def\@pr@prc{#2\%}\def\@pr@cmt{#1}}
-\newcommand{\fe}[2][]{\def\@fe@prc{#2\%}\def\@fe@cmt{#1}}
-\newcommand{\me}[2][]{\def\@me@prc{#2\%}\def\@me@cmt{#1}}
+\def\setcsdvalidation#1{\def\@csdvalidation{#1}}
+\def\setcsvalidation#1{\def\@csvalidation{#1}}
+\def\setversion#1{\def\@version{#1}}
+\def\setyear#1{\def\@syear{#1}}
+\def\setabstract#1{\def\@abstract{#1}}
 
-\newcommand{\volume}[3]{
+
+\newcommand{\setca}[2][]{\def\@ca@prc{#2\%}\def\@ca@cmt{#1}}
+\newcommand{\setpr}[2][]{\def\@pr@prc{#2\%}\def\@pr@cmt{#1}}
+\newcommand{\setfe}[2][]{\def\@fe@prc{#2\%}\def\@fe@cmt{#1}}
+\newcommand{\setme}[2][]{\def\@me@prc{#2\%}\def\@me@cmt{#1}}
+
+\newcommand{\setvolume}[3]{
 	\def\@lect@volume{#1}
 	\def\@tuto@volume{#2}
 	\def\@prac@volume{#3}
 	\def\@totl@volume{\floatssum{#1}{#2}{#3}}
 }
 
-\def\hy{\def\@tmode{Hybrid}} 
-\def\ol{\def\@tmode{Online}}
+\def\sethy{\def\@tmode{Hybrid}} 
+\def\setol{\def\@tmode{Online}}
+
 
 %===============================================================
 % Adding elements
@@ -272,7 +285,7 @@
 % Printing commands (print results)
 %===============================================================
 
-\newcommand{\identification}{%
+\newcommand{\printidentification}{%
 	\begin{tblr}{
 			colspec = {p{2.5cm}l
 				       p{1.6cm}l
@@ -295,13 +308,13 @@
 		\SetHline{1-1,3-12}{1pt}
 		Semester && \SetCell[c=10]{c} Course Title &&&&&&&&& \\
 		\SetHline{1-1,3-12}{1pt}
-		\@semester && \SetCell[c=10]{c} \@title &&&&&&&&& \\
+		\@socle-S\@semester && \SetCell[c=10]{c} \@title &&&&&&&&& \\
 		\SetHline{1-1,3-12}{1pt}
 		\SetCell[c=12]{c} &&&&&&&&&&&\\
 		\SetHline{1-1,3-3,5-5,7-10,12-12}{1pt}
-		UE Code && ECTS && Coeff && \SetCell[c=4]{c} Hourly volume &&& && Teaching Mode \\
+		TU Code && ECTS && Coeff && \SetCell[c=4]{c} Hourly volume &&& && Teaching Mode \\
 		\SetHline{1-1,3-3,5-5,7-10,12-12}{1pt}
-		\SetCell[r=2]{c} \@unit && \SetCell[r=2]{c} \@ects && \SetCell[r=2]{c} \@coeff && 
+		\SetCell[r=2]{c} \@unittype TU\ \@unitid && \SetCell[r=2]{c} \@ects && \SetCell[r=2]{c} \@coeff && 
 		Lectures & Tutorials & Practicals & Total && \SetCell[r=2]{c} \@tmode \\
 		\SetHline{1-1,3-3,5-5,7-10,12-12}{1pt}
 		&&  &&  && \@lect@volume H & \@tuto@volume H & \@prac@volume H & \@totl@volume H &&  \\
@@ -311,55 +324,48 @@
 
 }
 
-\newcommand{\objectives}{%
+\newcommand{\loopitems}[1]{
+	\def\sep{}
+	\renewcommand*{\do}[1]{\sep\item ##1\def\sep{;}}
+	\begin{itemize}
+		\dolistloop{#1}.
+	\end{itemize}
+}
+
+\newcommand{\printabstract}{\@abstract}
+
+\newcommand{\printobjectives}{%
 	\ifdefempty{\@objectivelist}{}{
-		\renewcommand*{\do}[1]{\item ##1}
 		\vspace{14pt}On completion of this course, students will be able to:
-		\begin{itemize}
-			\dolistloop{\@objectivelist}
-		\end{itemize}
+		\loopitems{\@objectivelist}
 	}	
 }
 
-\newcommand{\prerequisites}{%
+\newcommand{\printprerequisites}{%
 	\ifdefempty{\@prerequisitelist}{}{
-		\renewcommand*{\do}[1]{\item ##1}
-		\begin{itemize}
-			\dolistloop{\@prerequisitelist}
-		\end{itemize}
+		\loopitems{\@prerequisitelist}
 	}	
 }
 
-\newcommand{\redactors}{%
+\newcommand{\printredactors}{%
 	\ifdefempty{\@redactorlist}{}{
-		\renewcommand*{\do}[1]{\item ##1}
-		This syllabus was proposed by:
-		\begin{itemize}
-			\dolistloop{\@redactorlist}
-		\end{itemize}
+		\loopitems{\@redactorlist}
 	}	
 }
 
-\newcommand{\reviewers}{%
+\newcommand{\printreviewers}{%
 	\ifdefempty{\@reviewerlist}{}{
-		\renewcommand*{\do}[1]{\item ##1}
-		This syllabus was reviewed by:
-		\begin{itemize}
-			\dolistloop{\@reviewerlist}
-		\end{itemize}
+		\loopitems{\@reviewerlist}
 	}	
 }
 
-\newcommand{\methods}{%
+\newcommand{\printmethods}{%
 	\ifdefempty{\@methodlist}{}{
-		\renewcommand*{\do}[1]{\item ##1}
-		\begin{itemize}
-			\dolistloop{\@methodlist}
-		\end{itemize}
-	}	
+		\loopitems{\@methodlist}
+	}
 }
 
-\newcommand{\chapters}{
+\newcommand{\printchapters}{
 	\ifdefempty{\@chapterslist}{}{
 		\setcounter{cchapter}{0}
 		\renewcommand*{\do}[1]{\stepcounter{cchapter}##1}
@@ -367,7 +373,7 @@
 	}
 }
 
-\newcommand{\practicals}{
+\newcommand{\printpracticals}{
 	\ifdefempty{\@practicallist}{}{
 		\setcounter{cpractical}{0}
 		\renewcommand*{\do}[1]{\stepcounter{cpractical}##1}
@@ -375,7 +381,7 @@
 	}
 }
 
-\newcommand{\assessment}{%
+\newcommand{\printassessment}{%
 	\begin{tblr}{
 			colspec = {p{1cm}lp{4cm}lp{9.25cm}lp{2cm}},
 %			rows = {valign=m, halign=c},
