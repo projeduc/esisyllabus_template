@@ -11,9 +11,13 @@
 \shortfalse % by default it is long
 \newif\ifinfo % information
 \infofalse % by default no information
+\newif\ifsmp % simpl
+\smpfalse % by default no information
+
 
 \DeclareOption{short}{\shorttrue}
 \DeclareOption{info}{\infotrue}
+\DeclareOption{smp}{\smptrue}
 
 \ProcessOptions\relax
 
@@ -43,6 +47,8 @@
 \usepackage{fancyhdr}
 \usepackage[natbibapa]{apacite}
 
+\usepackage{esisyllabusinf}
+
 
 \definecolor{skyblue}{RGB}{150, 200, 255}
 \definecolor{darkblue}{RGB}{20,40,120} %25,47,98}
@@ -57,28 +63,6 @@
 \def\@version{}
 \def\@syear{}
 
-\def\@title{}
-\def\@semester{x}
-\def\@ects{n}
-\def\@coeff{m}
-\def\@unitid{}
-\def\@unittype{F}
-\def\@tmode{Face-to-face}
-\def\@socle{CP}
-
-\def\@lect@volume{0}
-\def\@tuto@volume{0}
-\def\@prac@volume{0}
-\def\@totl@volume{0}
-
-\def\@ca@prc{0\%}
-\def\@ca@cmt{}
-\def\@pr@prc{0\%}
-\def\@pr@cmt{}
-\def\@me@prc{0\%}
-\def\@me@cmt{}
-\def\@fe@prc{0\%}
-\def\@fe@cmt{}
 
 \def\@redactorlist{}
 \def\@reviewerlist{}
@@ -100,8 +84,6 @@
 % Format an expert (First-name Family-name (email))
 \newcommand{\formatexpert}[3]{\titlecap{#1}\ \titlecap{#2} (\url{#3})} %\MakeUppercase
 
-% summs the values of 3 float numbers
-\newcommand{\floatssum}[3]{\expandafter\strip@pt\dimexpr#3pt+#2pt+#1pt\relax}
 
 \newcommand{\formatchapter}[4]{
 	%	\vspace{6pt}
@@ -139,41 +121,11 @@
 % Setters (setting internal variables)
 %===============================================================
 
-\def\settitle#1{\def\@title{#1}}
-\def\setsemester#1{\def\@semester{#1}}
-\def\setects#1{\def\@ects{#1}}
-\def\setcoeff#1{\def\@coeff{#1}}
-\def\setunitid#1{\def\@unitid{#1}}
-
-\def\setmethodological{\def\@unittype{M}}
-\def\setiscovery{\def\@unittype{D}}
-\def\settransversal{\def\@unittype{T}}
-
-\def\setcs{\def\@socle{CS}}
-
-
 \def\setcsdvalidation#1{\def\@csdvalidation{#1}}
 \def\setcsvalidation#1{\def\@csvalidation{#1}}
 \def\setversion#1{\def\@version{#1}}
 \def\setyear#1{\def\@syear{#1}}
 \def\setabstract#1{\def\@abstract{#1}}
-
-
-\newcommand{\setca}[2][]{\def\@ca@prc{#2\%}\def\@ca@cmt{#1}}
-\newcommand{\setpr}[2][]{\def\@pr@prc{#2\%}\def\@pr@cmt{#1}}
-\newcommand{\setfe}[2][]{\def\@fe@prc{#2\%}\def\@fe@cmt{#1}}
-\newcommand{\setme}[2][]{\def\@me@prc{#2\%}\def\@me@cmt{#1}}
-
-\newcommand{\setvolume}[3]{
-	\def\@lect@volume{#1}
-	\def\@tuto@volume{#2}
-	\def\@prac@volume{#3}
-	\def\@totl@volume{\floatssum{#1}{#2}{#3}}
-}
-
-\def\sethy{\def\@tmode{Hybrid}} 
-\def\setol{\def\@tmode{Online}}
-
 
 %===============================================================
 % Adding elements
@@ -276,9 +228,14 @@
 \usepackage[left=1.5cm,right=1.5cm,top=1cm,bottom=1cm,includefoot,includehead,headheight=1.25cm,asymmetric]{geometry}
 \pagestyle{fancyinfo}
 \else
+\ifsmp
 \usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,includefoot,includehead,headheight=14pt,asymmetric]{geometry}
 \pagestyle{fancymain}
 \thispagestyle{fancyfirstpage}
+\else
+\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1cm,includefoot,asymmetric]{geometry}
+\pagestyle{empty}
+\fi
 \fi
 
 %===============================================================
@@ -308,7 +265,7 @@
 		\SetHline{1-1,3-12}{1pt}
 		Semester && \SetCell[c=10]{c} Course Title &&&&&&&&& \\
 		\SetHline{1-1,3-12}{1pt}
-		\@socle-S\@semester && \SetCell[c=10]{c} \@title &&&&&&&&& \\
+		\@socle-S\@semester && \SetCell[c=10]{c} \bfseries\Large\color{darkblue}\@title &&&&&&&&& \\
 		\SetHline{1-1,3-12}{1pt}
 		\SetCell[c=12]{c} &&&&&&&&&&&\\
 		\SetHline{1-1,3-3,5-5,7-10,12-12}{1pt}
@@ -349,12 +306,14 @@
 
 \newcommand{\printredactors}{%
 	\ifdefempty{\@redactorlist}{}{
+		This syllabus was proposed by:
 		\loopitems{\@redactorlist}
 	}	
 }
 
 \newcommand{\printreviewers}{%
 	\ifdefempty{\@reviewerlist}{}{
+		It was reviewed by:
 		\loopitems{\@reviewerlist}
 	}	
 }
@@ -383,7 +342,7 @@
 
 \newcommand{\printassessment}{%
 	\begin{tblr}{
-			colspec = {p{1cm}lp{4cm}lp{9.25cm}lp{2cm}},
+			colspec = {p{1cm}lp{4cm}lp{9.25cm}lQ[r,2cm]},
 %			rows = {valign=m, halign=c},
 			cell{1,4}{odd} = {skyblue, fg=black, font=\bfseries, halign=c},
 			colsep=3pt,
@@ -403,18 +362,25 @@
 		\SetCell[c=7]{c} &&&&&& \\
 %		\hline
 		Code && Title && Comment && Percentage \\
-%		\hline
-		CA && Continuous Assessment && \@ca@cmt && \@ca@prc\\
-%		\hline
-		PR && Practicals grade && \@pr@cmt && \@pr@prc \\
-%		\hline
-		ME && Midterm exam && \@me@cmt && \@me@prc \\
-%		\hline
-		FE && Final exam && \@fe@cmt && \@fe@prc \\
-%		\hline
-		
+%		CA && Continuous Assessment && \@ca@cmt && \@ca@prc\\
+%		PR && Practicals grade && \@pr@cmt && \@pr@prc \\
+%		ME && Midterm exam && \@me@cmt && \@me@prc \\
+%		FE && Final exam && \@fe@cmt && \@fe@prc \\
+		CA && Continuous Assessment && 
+		\begin{minipage}{9.15cm}\vspace{6pt}\@ca@cmt\vspace{6pt}\end{minipage} && \@ca@prc \\
+%		
+		PR && Practicals grade && 
+		\begin{minipage}{9.15cm}\vspace{6pt}\@pr@cmt\vspace{6pt}\end{minipage} && \@pr@prc \\
+%		
+		ME && Midterm exam && 
+		\begin{minipage}{9.15cm}\vspace{6pt}\@me@cmt\vspace{6pt}\end{minipage} && \@me@prc \\
+%		
+		FE && Final exam && 
+		\begin{minipage}{9.15cm}\vspace{6pt}\@fe@cmt\vspace{6pt}\end{minipage} && \@fe@prc \\
 	\end{tblr}
 }
+
+
 
 
 %===============================================================
@@ -449,3 +415,44 @@
 
 \usepackage{enumitem}
 \setlist{nolistsep}
+
+%===============================================================
+% Custom Tabls
+%===============================================================
+
+\def\@tbl@label@a{}
+\def\@tbl@label@b{}
+\def\@tbl@label@c{}
+
+\def\@tbl@len@a{0.3\textwidth}
+\def\@tbl@len@b{0.3\textwidth}
+\def\@tbl@len@c{0.3\textwidth}
+
+\newcommand{\defthreecoltbl}[6]{
+	\def\@tbl@label@a{#1}
+	\def\@tbl@label@b{#2}
+	\def\@tbl@label@c{#3}
+	
+	\def\@tbl@len@a{#4}
+	\def\@tbl@len@b{#5}
+	\def\@tbl@len@c{#6}
+}
+
+\newcommand{\printthreecoltbl}[3]{
+	\begin{tabular}{|p{\@tbl@len@a}|p{\@tbl@len@b}|p{\@tbl@len@c}|}
+		\hline
+		\rowcolor{skyblue}\textbf{\@tbl@label@a} & \textbf{\@tbl@label@b} & \textbf{\@tbl@label@c}\\
+		\hline
+		#1 & 
+		\begin{minipage}{5.4cm}
+			\vspace{6pt}#2\vspace{6pt}
+		\end{minipage} &
+		\begin{minipage}{9.15cm}
+			\vspace{6pt}#3\vspace{6pt}
+		\end{minipage}\\
+		\hline
+	\end{tabular}
+	\vskip6pt
+}
+
+

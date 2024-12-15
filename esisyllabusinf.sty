@@ -1,0 +1,75 @@
+% Designed by: Abdelkrime Aries
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{esisyllabusinf}[2024/12/12 Manage syllabus information]
+
+%===============================================================
+% Helper commands (formatting)
+%===============================================================
+
+% summs the values of 3 float numbers
+\newcommand{\floatssumthree}[3]{\expandafter\strip@pt\dimexpr#3pt+#2pt+#1pt\relax}
+
+% summs the values of 2 float numbers
+\newcommand{\floatssumtwo}[2]{\expandafter\strip@pt\dimexpr#2pt+#1pt\relax}
+
+%===============================================================
+% Internal Varivables
+%===============================================================
+
+\def\initinf{
+	\def\@title{}
+	\def\@semester{x}
+	\def\@ects{n}
+	\def\@coeff{m}
+	\def\@unitid{}
+	\def\@unittype{F}
+	\def\@tmode{Face-to-face}
+	\def\@socle{CP}
+	
+	\def\@lect@volume{0}
+	\def\@tuto@volume{0}
+	\def\@prac@volume{0}
+	\def\@totl@volume{0}
+	
+	\def\@ca@prc{0\%}
+	\def\@ca@cmt{}
+	\def\@pr@prc{0\%}
+	\def\@pr@cmt{}
+	\def\@me@prc{0\%}
+	\def\@me@cmt{}
+	\def\@fe@prc{0\%}
+	\def\@fe@cmt{}
+}
+
+\initinf
+
+%===============================================================
+% Setters (setting internal variables)
+%===============================================================
+
+\def\settitle#1{\def\@title{#1}}
+\def\setsemester#1{\def\@semester{#1}}
+\def\setects#1{\def\@ects{#1}}
+\def\setcoeff#1{\def\@coeff{#1}}
+\def\setunitid#1{\def\@unitid{#1}}
+
+\def\setmethodological{\def\@unittype{M}}
+\def\setiscovery{\def\@unittype{D}}
+\def\settransversal{\def\@unittype{T}}
+
+\def\setcs{\def\@socle{CS}}
+
+\newcommand{\setca}[2]{\def\@ca@prc{#2\%}\def\@ca@cmt{#1}}
+\newcommand{\setpr}[2]{\def\@pr@prc{#2\%}\def\@pr@cmt{#1}}
+\newcommand{\setfe}[2]{\def\@fe@prc{#2\%}\def\@fe@cmt{#1}}
+\newcommand{\setme}[2]{\def\@me@prc{#2\%}\def\@me@cmt{#1}}
+
+\newcommand{\setvolume}[3]{
+	\def\@lect@volume{#1}
+	\def\@tuto@volume{#2}
+	\def\@prac@volume{#3}
+	\def\@totl@volume{\floatssumthree{#1}{#2}{#3}}
+}
+
+\def\sethy{\def\@tmode{Hybrid}} 
+\def\setol{\def\@tmode{Online}}

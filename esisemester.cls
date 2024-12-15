@@ -45,6 +45,8 @@
 
 \usepackage{pgf}  % Package for floating-point arithmetic
 
+\usepackage{esisyllabusinf}
+
 
 \definecolor{skyblue}{RGB}{150, 200, 255}
 \definecolor{darkblue}{RGB}{20,40,120} %25,47,98}
@@ -54,7 +56,8 @@
 \usepackage[left=1.5cm,right=1.5cm,top=1cm,bottom=1cm,includefoot,includehead,headheight=1.25cm,asymmetric,landscape]{geometry}
 %\pagestyle{fancyinfo}
 \else
-\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,includefoot,includehead,headheight=14pt,asymmetric,landscape]{geometry}
+%\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,includefoot,includehead,headheight=14pt,asymmetric,landscape]{geometry}
+\usepackage[left=2cm,right=1cm,top=1.5cm,bottom=1.5cm,landscape]{geometry}
 %\pagestyle{fancymain}
 %\thispagestyle{fancyfirstpage}
 \fi
@@ -63,37 +66,8 @@
 % Internal Varivables
 %===============================================================
 
-%\def\@csdvalidation{}
-%\def\@csvalidation{}
-%\def\@version{}
-%\def\@syear{}
-
-\def\init{
-	\def\@title{}
-	\def\@semester{x}
-	\def\@ects{n}
-	\def\@coeff{m}
-	\def\@unitid{}
-	\def\@unittype{F}
-	\def\@tmode{Face-to-face}
-	\def\@socle{CP}
-	
-	\def\@lect@volume{0}
-	\def\@tuto@volume{0}
-	\def\@prac@volume{0}
-	\def\@totl@volume{0}
-	
-	\def\@ca@prc{0\%}
-	\def\@ca@cmt{}
-	\def\@pr@prc{0\%}
-	\def\@pr@cmt{}
-	\def\@me@prc{0\%}
-	\def\@me@cmt{}
-	\def\@fe@prc{0\%}
-	\def\@fe@cmt{}
-}
-
-\init
+\def\@sem@num{0}
+\def\@sem@unit@type{F}
 
 \def\@sem@lect@volume{0}
 \def\@sem@tuto@volume{0}
@@ -108,56 +82,8 @@
 \newcounter{rn}
 \setcounter{rn}{0}
 
-%===============================================================
-% Helper commands (formatting)
-%===============================================================
-
-% summs the values of 3 float numbers
-\newcommand{\floatssum}[3]{\expandafter\strip@pt\dimexpr#3pt+#2pt+#1pt\relax}
-
-% summs the values of 2 float numbers
-\newcommand{\floatssumb}[2]{\expandafter\strip@pt\dimexpr#2pt+#1pt\relax}
-
-
-%===============================================================
-% Setters (setting internal variables)
-%===============================================================
-
-\def\settitle#1{\def\@title{#1}}
-\def\setsemester#1{\def\@semester{#1}}
-\def\setects#1{\def\@ects{#1}}
-\def\setcoeff#1{\def\@coeff{#1}}
-\def\setunitid#1{\def\@unitid{#1}}
-
-\def\setmethodological{\def\@unittype{M}}
-\def\setiscovery{\def\@unittype{D}}
-\def\settransversal{\def\@unittype{T}}
-
-\def\setcs{\def\@socle{CS}}
-
-
-%\def\setcsdvalidation#1{\def\@csdvalidation{#1}}
-%\def\setcsvalidation#1{\def\@csvalidation{#1}}
-%\def\setversion#1{\def\@version{#1}}
-%\def\setyear#1{\def\@syear{#1}}
-%\def\setabstract#1{\def\@abstract{#1}}
-
-
-\newcommand{\setca}[2][]{\def\@ca@prc{#2\%}\def\@ca@cmt{#1}}
-\newcommand{\setpr}[2][]{\def\@pr@prc{#2\%}\def\@pr@cmt{#1}}
-\newcommand{\setfe}[2][]{\def\@fe@prc{#2\%}\def\@fe@cmt{#1}}
-\newcommand{\setme}[2][]{\def\@me@prc{#2\%}\def\@me@cmt{#1}}
-
-\newcommand{\setvolume}[3]{
-	\def\@lect@volume{#1}
-	\def\@tuto@volume{#2}
-	\def\@prac@volume{#3}
-	\def\@totl@volume{\floatssum{#1}{#2}{#3}}
-}
-
-\def\sethy{\def\@tmode{Hybrid}} 
-\def\setol{\def\@tmode{Online}}
-
+\newcounter{unum}
+\setcounter{unum}{0}
 
 %===============================================================
 % Printing commands (print results)
@@ -165,12 +91,13 @@
 
 \newwrite\myfile
 
-\newcommand{\startsemester}[1]{
+\newcommand{\startsemester}[2]{
+	\def\@sem@num{#2}
 	
-	\immediate\openout\myfile=tmp.tex
+	\immediate\openout\myfile=tmp.aux
 	
 	\immediate\write\myfile{\string\begin{center}}
-	\immediate\write\myfile{\string\huge\string\bfseries\string\color{darkblue} #1}
+	\immediate\write\myfile{\string\huge\string\bfseries\string\color{darkblue} #1 - S#2}
 	\immediate\write\myfile{\string\end{center}}
 	\immediate\write\myfile{\string\begin{tblr}\string{\string}}
 	\immediate\write\myfile{\string\hline}
@@ -184,25 +111,28 @@
 
 
 \def\starttype#1{%
+	\setcounter{unum}{0}
 	\stepcounter{rn}\listeadd{\@firstlst}{\thern}\listeadd{\@lastlst}{\thern}
 	\immediate\write\myfile{\string\SetCell[c=12]{c} &&&&&&&&&&& \\}
 	\immediate\write\myfile{\string\SetHline{1-1}{1pt}}
 	\immediate\write\myfile{\string\SetCell[]{c, darkblue, fg=white, font=\string\bfseries}}
 	\stepcounter{rn}\listeadd{\@lastlst}{\thern}
 	\immediate\write\myfile{#1 Units & \string\SetCell[c=11]{c} &&&&&&&&&& \\}
-	\immediate\write\myfile{\string\SetHline{1-1}{1pt}}
+%	\immediate\write\myfile{\string\SetHline{1-1}{1pt}}
+	\immediate\write\myfile{\string\hline}
 }
 
-\def\startfundamental{\starttype{Fundamental}}
-\def\startmethodological{\starttype{Methodological}}
+\def\startfundamental{\starttype{Fundamental}\def\@sem@unit@type{F}}
+\def\startmethodological{\starttype{Methodological}\def\@sem@unit@type{M}}
+\def\startdiscovery{\starttype{Discovery}\def\@sem@unit@type{D}}
+\def\starttransversal{\starttype{Transversal}\def\@sem@unit@type{T}}
 
-
-\def\starttransversal{\starttype{Transversal}}
-
-\newcommand{\startunit}[2]{%
-	\stepcounter{rn}\listeadd{\@lastlst}{\thern}
+\newcommand{\startunit}[1]{%
+	\stepcounter{unum}
+	\stepcounter{rn}%\listeadd{\@lastlst}{\thern}
 	\immediate\write\myfile{\string\SetCell[]{skyblue, fg=black, font=\string\bfseries}}
-	\immediate\write\myfile{#1: #2 & \string\SetCell[c=11]{c} &&&&&&&&&& \\}
+%	\immediate\write\myfile{#1: #2 & \string\SetCell[c=11]{c} &&&&&&&&&& \\}
+	\immediate\write\myfile{\string\SetCell[c=12]{l} \@sem@unit@type TU \@sem@num.\theunum: #1 &&&&&&&&&&& \\}
 	\immediate\write\myfile{\string\hline}
 }
 
@@ -219,7 +149,7 @@
 	
 	\immediate\closeout\myfile
 	
-	\immediate\openout\myfile=tmp0.tex
+	\immediate\openout\myfile=tmp0.aux
 	\renewcommand*{\do}[1]{##1,}
 %	\immediate\write\myfile{\dolistloop{\firstlst}}
 	\immediate\write\myfile{\string\SetTblrInner{vline{1} = {\dolistloop{\@firstlst}3}{text=\string\clap{}}}}
@@ -250,9 +180,9 @@
 		row{1,2} = {skyblue, fg=black, font=\bfseries},
 	}
 	
-	\input{tmp0}
+	\input{tmp0.aux}
 	
-	\input{tmp}
+	\input{tmp.aux}
 
 }
 
@@ -270,11 +200,11 @@
 	\pgfmathsetmacro{\@sem@ects}{\@sem@ects + \@ects}
 	\pgfmathsetmacro{\@sem@coeff}{\@sem@coeff + \@coeff}
 
-	\init%
+	\initinf%
 }
 
 
 
 
-		
+\pagestyle{empty}
 
